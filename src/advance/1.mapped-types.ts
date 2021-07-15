@@ -58,3 +58,91 @@ type vehicle2 = {
   model: string;  // Compare vehicle1 & vehicle2 and see "model" is simple type here
 }
 
+// New example
+// type PageSetting = 'url' | 'content'
+// type Crawler = {
+//   [P in PageSetting]: string;
+// }
+
+interface WebPage {
+  url: string;
+  content: string;
+  size: number;
+}
+
+type NullableWebPage = { [K in keyof WebPage]: WebPage[K] | null };
+// eq. as below
+// type NullableWebPage = {
+//   url: string | null;
+//   content: string | null;
+//   size: number | null;
+// }
+
+// type NullableWebPage = { [K in keyof WebPage]: K | null };
+// eq. as below
+// type NullableWebPage = {
+//   url: "url" | null;
+//   content: "content" | null;
+//   size: "size" | null;
+// }
+
+type Crawler<T> = {
+  [P in keyof T]: T[P];
+}
+
+const google: Crawler<WebPage> = {
+  url: 'google.com',
+  content: 'html content of the page.',
+  size: 323
+}
+  
+
+// Option 1:-
+// type DogInfo = {
+//   name: string;
+// } & Record<string, string>
+
+// const woffy: DogInfo = {
+//   name: 'woffy',
+//   color: 'red'
+// }
+
+// Option 2:-
+// type DogInfo = {
+//   name: string;
+//   [key: string]: string | number; // MappedTypes
+// }
+
+// const woffy: DogInfo = {
+//   name: 'woffy',
+//   color: 'red',
+//   breed: 'Mutt',
+//   age: 3
+// }
+
+// Listerner for all properties of the type
+interface DogInfo {
+  name: string;
+  age: number;
+}
+
+type Listeners<T> = {
+  [K in keyof T as `on${Capitalize<string & K>}Change`]: (newValue: T[K]) => void;
+}
+
+function listenToObject<T>(obj: T, listeners: Listeners<T>) {
+  throw 'Needs to be implemented';
+}
+
+const lg: DogInfo = {
+  name: 'lg',
+  age: 4
+}
+
+type DogInfoListeners = Listeners<DogInfo>;
+
+listenToObject(lg, {
+  onNameChange: (name: string) => {}, 
+  onAgeChange: (age: number) => {}
+});
+
