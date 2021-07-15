@@ -1,4 +1,4 @@
-function loggerFunction() {
+export function loggerFunction() {
   return (str: string) => {
     console.log(str);
   }
@@ -7,12 +7,11 @@ function loggerFunction() {
 const logger1 = loggerFunction();
 logger1("My first log");
 
-
-function createLoggerClass() {
+export function createLoggerClass() {
   return class LoggerClass {
     private completeLog: string = "";
 
-    log(str: string) {
+    public log(str: string) {
       console.log(str);
       this.completeLog += str + "\n";
     }
@@ -20,8 +19,9 @@ function createLoggerClass() {
     dumpLog(): string {
       return this.completeLog;
     }
-  }
+  };
 }
+
 
 const MyLogger = createLoggerClass();
 const logger2 = new MyLogger();
